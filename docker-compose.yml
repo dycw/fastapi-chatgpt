@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  web:
+    build: .
+    command: uvicorn src.app.main:app --host 0.0.0.0 --port 80
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+    env_file: .env
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+volumes:
+  postgres_data:
